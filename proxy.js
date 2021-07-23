@@ -30,8 +30,13 @@ export default function reverseProxy(options) {
   }
 
   function bindError(req, res, id) {
-    return function(err) {
-
+    return function (err) {
+      const msg = String(err.stack || err)
+      log('[%s] error happened: %s', id, msg)
+      if (!res.headersSent) {
+        res.writeHead(500, { 'content-type': 'text/plain' })
+      }
+      res.end(msg)
     }
   }
 
@@ -45,14 +50,14 @@ export default function reverseProxy(options) {
     }
 
     const id = `${req.headers} ${req.url} => ${target.hostname}:${target.port}`
-    log("[%s] proxied request", id)
+    log('[%s] proxied request', id)
 
     const req2 = http.request(info, res2 => {
-      res2.on("error", bindError(req, res, id))
+      res2.on('error', bindError(req, res, id))
       res.writeHead(res2.statusCode, res2.headers)
       res2.pipe(res)
     })
     req.pipe(req2)
-    req2.on("error", bindError(req, res, id))
+    req2.on('error', bindError(req, res, id))
   }
 }
