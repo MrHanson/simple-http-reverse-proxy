@@ -1,6 +1,6 @@
 import http from 'http'
 import assert from 'assert'
-import log from './pkg/utils/log'
+import log from './pkg/utils/log.js'
 
 /**
  * interface Options {
@@ -49,7 +49,7 @@ export default function reverseProxy(options) {
       headers: req.headers,
     }
 
-    const id = `${req.headers} ${req.url} => ${target.hostname}:${target.port}`
+    const id = `${req.method} ${req.url} => ${target.hostname}:${target.port}`
     log('[%s] proxied request', id)
 
     const req2 = http.request(info, res2 => {

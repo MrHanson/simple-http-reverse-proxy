@@ -1,6 +1,6 @@
 import http from 'http'
-import reverseProxy from './proxy'
-import log from './pkg/utils/log'
+import reverseProxy from './proxy.js'
+import log from './pkg/utils/log.js'
 
 export function createExampleServer(port) {
   return new Promise((rs, rj) => {
