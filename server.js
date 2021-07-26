@@ -1,3 +1,5 @@
+import ini from 'ini'
+import fs from 'fs'
 import http from 'http'
 import reverseProxy from './proxy.js'
 import log from './pkg/utils/log.js'
@@ -32,3 +34,7 @@ export function createProxyServer(port, proxiedPortList) {
     server.on('error', rj)
   })
 }
+
+export const serverIni = ini.parse(fs.readFileSync('./conf/server.ini', 'utf-8'))
+export const { PORT_START, SIZE } = serverIni['example']
+export const { IP } = serverIni['proxy']
